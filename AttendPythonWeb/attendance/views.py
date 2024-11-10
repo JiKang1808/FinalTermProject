@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Student, Attendance, User
+from .models import Student, Attendance, User, Teacher
 
 @csrf_exempt
 
@@ -14,7 +14,11 @@ def home(request):
         std = User.objects.filter(username=username, password=password, role="Student").first()
         lec = User.objects.filter(username=username, password=password, role="Teacher").first()
         if std:
-            return render(request, 'interface/student.html')
+            user = Student.objects.filter(user = std).first()
+            context = {'user': user}
+            return render(request, 'interface/student.html',context)
         if lec:
-            return render(request, 'interface/lecturer.html')
+            user = Teacher.objects.filter(user = lec).first()
+            context = {'user': user}
+            return render(request, 'interface/lecturer.html',context)
     return render(request, 'login/login.html')
