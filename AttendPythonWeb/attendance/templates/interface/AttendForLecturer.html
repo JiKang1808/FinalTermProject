@@ -1,0 +1,18 @@
+{% extends "page/interface_base.html" %}
+
+{% block title %}
+
+{% endblock title %}
+
+{% block content %}
+    <table class="Attend">
+        <tr>
+            <td>Order</td>
+            <td>Name</td>
+            <td>Student Code</td>
+            {% for date in class.get_class_dates %}
+                <td> {{date | date:"d/m/Y"}} </td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock content %}

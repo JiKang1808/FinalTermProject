@@ -21,5 +21,7 @@ from attendance import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('class/<int:id>',views.getClass,name='Class'),
+    path('attendlist/<int:id>',views.getAttendanceList,name='AttendanceList'),
 ]
 

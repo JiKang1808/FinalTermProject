@@ -1,0 +1,54 @@
+{% extends "page/interface_base.html" %}
+
+{% block title %}
+    CLASS MANAGEMENT
+{% endblock title %}
+
+{% block information %}
+    Class: {{class.class_name}}, Lecturer {{class.teacher}}
+{% endblock information %}
+
+{% block content %}
+<form method="POST">
+{% csrf_token %}
+    <table>
+        <tr>
+            <td><strong>Class:</strong></td>
+            <td>{{class.class_name}}</td>
+        </tr>
+        <tr>
+            <td><strong>Lecturer:</strong></td>
+            <td>{{class.teacher}}</td>
+        </tr>
+        <tr>
+            <td><strong>Update & Save Data:</strong></td>
+            <td><button class="btn btn-dark" >SAVE</button> </td>
+        </tr>
+    </table>
+    <table>
+        <tr class="title">
+            <td>Order</td>
+            <td>Name</td>
+            <td>Student Code</td>
+            <td>Midle Score</td>
+            <td>Final Score</td>
+            <td>Total Score</td>
+            <td>Arrange</td>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td> {{forloop.counter}} </td>
+            <td> {{student.name}} </td>
+            <td> {{student.student_id}} </td>
+            <td>
+                <textarea class="midScr " name="midScr{{student.id}}"> {{student.midScr}} </textarea>
+            </td>
+            <td> <textarea class="fnlScr " name="fnlScr{{student.id}}"> {{student.fnlScr}} </textarea> </td>
+            <td> {{student.Total}} </td>
+            <td> {{student.Arrange}} </td>
+        </tr>
+        {% endfor %}
+    </table>
+</form>
+{% endblock content %}
+

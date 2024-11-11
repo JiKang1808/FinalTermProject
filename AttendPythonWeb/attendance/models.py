@@ -1,4 +1,7 @@
 from django.db import models
+
+import datetime
+from datetime import timedelta, datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -19,6 +22,9 @@ class User(models.Model):
 class Class(models.Model):
     class_name = models.CharField(max_length=100, verbose_name="Lớp học")
     teacher = models.ForeignKey('Teacher', on_delete=models.SET_NULL, null=True, verbose_name="Giảng viên đứng lớp")
+    start_date = models.DateField(default=datetime.now,verbose_name="Ngày bắt đầu")
+    start_time = models.TimeField(null=True, verbose_name="Giờ học")
+    # Một giảng viên có thể dạy nhiều lớp 
     
     def __str__(self):
         return self.class_name
@@ -29,6 +35,12 @@ class Class(models.Model):
         students_in_class = Student.objects.filter(class_name=self)
         return ', '.join([student.name for student in students_in_class])
     student_list.short_description = 'Danh sách sinh viên'
+    def get_class_dates(self):
+        class_dates = [self.start_date + timedelta(days=7*i) for i in range(15)]
+        return class_dates
+    def get_full_datetime(self):
+        full_datetime = datetime.combine(self.start_date, self.start_time)
+        return full_datetime
 
 # Model Teacher
 class Teacher(models.Model):
@@ -45,17 +57,35 @@ class Student(models.Model):
     name = models.CharField(max_length=100, verbose_name="Tên")
     student_id = models.CharField(max_length=20, unique=True, verbose_name="Mã số sinh viên")
     class_name = models.ForeignKey('Class', on_delete=models.SET_NULL, null=True, verbose_name="Danh sách lớp học phần")
+    # Một lớp có thể chứa nhiều học sinh
+    midScr = models.FloatField(default=0,verbose_name="Điểm giữa kì")
+    fnlScr = models.FloatField(default=0,verbose_name="Điểm cuối kỳ")
     fingerprint_data = models.IntegerField(null=True, blank=True, verbose_name="Dữ liệu vân tay")
-    
+    def Total(self):
+        return (self.midScr + self.fnlScr) /2
+    def Arrange(self):
+        if self.Total() > 8:
+            return "Giỏi"
+        elif self.Total() > 6.5:
+            return "Khá"
+        elif self.Total() > 5:
+            return "Trung bình"
+        else:
+            return "Yếu"
     def __str__(self):
         return self.name
+    def getAttendace(self):
+        attendances = Attendance.objects.filter(student=self)
+        return attendances
+    def getStatus(self, other):
+        return self.getAttendace().filter(timestamp__date=other)
 
 
 # Model Attendance
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,verbose_name="Sinh viên")
     timestamp = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=[('Present', 'Present'), ('Absent', 'Absent'), ('Late', 'Late')], default='Present', verbose_name="Trạng thái điểm danh")
-
     def __str__(self):
-        return f"{self.student.name} - {self.timestamp} - {self.status}"
+        return f"{self.student.name} - {self.timestamp} "
+
+

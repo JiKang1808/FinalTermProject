@@ -23,20 +23,10 @@ class TeacherAdmin(admin.ModelAdmin):
         return False
 class StudentInline(admin.TabularInline):
     model = Student
-    fields = ['name', 'student_id', 'fingerprint_data','attendance_status']
-    readonly_fields = ['name', 'student_id', 'fingerprint_data','attendance_status']
+    fields = ['name', 'student_id', 'fingerprint_data']
+    readonly_fields = ['name', 'student_id', 'fingerprint_data']
     can_delete = False 
     extra = 0  
-    def attendance_status(self, obj):
-        latest_attendance = Attendance.objects.filter(student=obj).order_by('-timestamp').first()
-        if latest_attendance:
-            if latest_attendance.status == 'Present':
-                return format_html('<span style="color: green;">✔</span>')
-            elif latest_attendance.status == 'Late':
-                return format_html('<span style="color: red;">-</span>')
-        else:
-            return format_html('<span style="color: red;">X</span>')
-    attendance_status.short_description = 'Attendances'
 class ClassAdmin(admin.ModelAdmin):
     list_display = ['class_name', 'teacher', 'student_count', ]
     inlines = [StudentInline]
@@ -44,7 +34,7 @@ class ClassAdmin(admin.ModelAdmin):
         return obj.student_count()
     student_count.short_description = 'Class Size'
 class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ['student', 'formatted_timestamp', 'status']
+    list_display = ['student', 'formatted_timestamp']
     def formatted_timestamp(self, obj):
         local_timestamp = localtime(obj.timestamp) 
         return local_timestamp.strftime('%Y-%m-%d %H:%M:%S')

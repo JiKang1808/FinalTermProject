@@ -12,30 +12,50 @@
     <script>
         alert("Login successfully!")
     </script>
-    <h1 class="title">Lecturer</h1>
-    <div class="row">
-        <div class="col">
-            <a href=""><h4>STUDENT</h4></a>
-            <p>Student List</p>
-            <p>Set Mark</p>
-            <p>Arrange</p>
-        </div>
-        <div class="col ">
-            <h4>BLOG</h4>
-            <p>Post</p>
-            <p>Delete</p>
-            <p>Edit</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col ">
-            <h4>LECTURE</h4>
-            <p>Edit System</p>
-        </div>
-        <div class="col ">
-            <h4>ACCOUNT</h4>
-            <p>Log out</p>
-            <p>Change Password</p>
-        </div>
-    </div>
+      <h1 class="title">Lecturer</h1>
+      <div class="row">
+          <div class="col">
+              <div class="dropdown">
+                  <h4 class="dropdown-toggle" data-bs-toggle="dropdown">STUDENT</h4>
+                  <ul class="dropdown-menu">
+                  {% for class in classes %}
+                    <li><a class="dropdown-item" href="{% url 'Class' class.id %}">{{class.class_name}}</a></li>
+                  {% endfor %}
+                  </ul>
+              </div>
+              <div class="dropdown">
+                  <p class="dropdown-toggle" data-bs-toggle="dropdown">Student List</p>
+                  <ul class="dropdown-menu">
+                  {% for class in classes %}
+                    <li><a class="dropdown-item" href="{% url 'Class' class.id %}">{{class.class_name}}</a></li>
+                  {% endfor %}
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <p class="dropdown-toggle" data-bs-toggle="dropdown">Attendance List</p>
+                  <ul class="dropdown-menu">
+                  {% for class in classes %}
+                    <li><a class="dropdown-item" href="{% url 'AttendanceList' class.id %}">{{class.class_name}}</a></li>
+                  {% endfor %}
+                  </ul>
+                </div>
+          </div>
+          <div class="col ">
+              <h4>BLOG</h4>
+              <p>Post</p>
+              <p>Delete</p>
+              <p>Edit</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col ">
+              <h4>LECTURE</h4>
+              <p>Edit System</p>
+          </div>
+          <div class="col ">
+              <h4>ACCOUNT</h4>
+              <a href="{% url 'home' %}"><p>Log out</p></a>
+              <p>Change Password</p>
+          </div>
+      </div>    
 {% endblock content %}

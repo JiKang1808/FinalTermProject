@@ -42,3 +42,45 @@ a {
     color: inherit; /* Giữ nguyên màu của text xung quanh */
     text-decoration: none; /* Không gạch chân */
 }
+
+a:hover{
+    color: gray;
+}
+
+.row.title .col.border{
+    font-weight: bold;
+}
+
+table{
+    width: 100%;
+    border: 1px solid black;
+}
+
+td,tr{
+    border: 1px solid black;
+    text-align: center;
+    padding: 8px;
+}
+
+tr.title td{
+    font-weight: bold;
+}
+
+td textarea{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.func{
+    padding: 30px;
+    margin: 30px;
+}
+
+h2{
+    text-align: center;
+}
+
+table.Attend{
+    overflow-x: auto;
+}
