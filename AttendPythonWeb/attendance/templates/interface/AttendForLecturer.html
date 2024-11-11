@@ -5,6 +5,8 @@
 {% endblock title %}
 
 {% block content %}
+
+    <h2>Giờ vào lớp: {{class.start_time}} </h2>
     <table class="Attend">
         <tr>
             <td>Order</td>
@@ -14,5 +16,17 @@
                 <td> {{date | date:"d/m/Y"}} </td>
             {% endfor %}
         </tr>
+        {% for student in students_statuses %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{student.student.name}}</td>
+                <td>{{student.student.student_id}}</td>
+                {% for status in student.statuses %}
+                    <td>
+                        {{ status }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
     </table>
 {% endblock content %}

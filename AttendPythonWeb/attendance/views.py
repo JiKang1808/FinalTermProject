@@ -25,7 +25,6 @@ def home(request):
     return render(request, 'login/login.html')
 
 def getClass(request, id):
-    
     classObj = Class.objects.get(id=id)
     students = Student.objects.filter(class_name = classObj)
     context = {
@@ -44,8 +43,17 @@ def getClass(request, id):
 def getAttendanceList(request, id):
     classObj = Class.objects.get(id=id)
     students = Student.objects.filter(class_name = classObj)
+    ListStudentAndHisStatuses = [] # Ở đây sẽ tạo một list chức các tuple gồm học sinh và status trong 15 ngày của học sinh đó 
+    class_dates = classObj.get_class_dates()
+    for student in students:
+        statuses = student.getStatus()
+        ListStudentAndHisStatuses.append({
+            'student':student,
+            'statuses':statuses
+        })
     context = {
         'class': classObj,
-        'students': students
+        'students_statuses': ListStudentAndHisStatuses,
+        'class_dates': class_dates
     }
     return render(request, 'interface/AttendForLecturer.html', context)

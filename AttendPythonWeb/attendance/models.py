@@ -38,9 +38,8 @@ class Class(models.Model):
     def get_class_dates(self):
         class_dates = [self.start_date + timedelta(days=7*i) for i in range(15)]
         return class_dates
-    def get_full_datetime(self):
-        full_datetime = datetime.combine(self.start_date, self.start_time)
-        return full_datetime
+    def get_full_datetime(self, date):
+        return datetime.combine(date, self.start_time)
 
 # Model Teacher
 class Teacher(models.Model):
@@ -62,7 +61,9 @@ class Student(models.Model):
     fnlScr = models.FloatField(default=0,verbose_name="Điểm cuối kỳ")
     fingerprint_data = models.IntegerField(null=True, blank=True, verbose_name="Dữ liệu vân tay")
     def Total(self):
-        return (self.midScr + self.fnlScr) /2
+        if self.midScr is not None and self.fnlScr is not None:
+            return (self.midScr + self.fnlScr) / 2
+        return 0
     def Arrange(self):
         if self.Total() > 8:
             return "Giỏi"
@@ -74,17 +75,34 @@ class Student(models.Model):
             return "Yếu"
     def __str__(self):
         return self.name
-    def getAttendace(self):
+    def getAttendance(self):
         attendances = Attendance.objects.filter(student=self)
         return attendances
-    def getStatus(self, other):
-        return self.getAttendace().filter(timestamp__date=other)
-
+    # def get_status(self, date, begin_time):
+    #     attendance = Attendance.objects.filter(timestamp__date=date, student=self).first()
+    #     if attendance:
+    #         if attendance.timestamp.time() > begin_time:
+    #             return 'Late'
+    #         elif attendance.timestamp.time() <= begin_time:
+    #             return 'Present'
+    #     return 'Absent'
+    def getStatus(self):
+        sttLst = []
+        for date in self.class_name.get_class_dates():
+            attendance = Attendance.objects.filter(timestamp__date=date, student=self).first()
+            if attendance:
+                if attendance.timestamp.time() > self.class_name.start_time:
+                    sttLst.append('Late')
+                elif attendance.timestamp.time() <= self.class_name.start_time:
+                    sttLst.append('Present')
+            else:
+                sttLst.append('Absent')
+        return sttLst
 
 # Model Attendance
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,verbose_name="Sinh viên")
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Thời gian điểm danh" )
     def __str__(self):
         return f"{self.student.name} - {self.timestamp} "
 
