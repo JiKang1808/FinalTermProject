@@ -13,29 +13,14 @@
         alert("Login successfully!")
     </script>
     <h2>List of Function for Student</h2>
-    <div class="row">
-        <div class="col">
-            <h4>STUDENT</h4>
-            <a href=""><p>Student List</p></a>
-            <p>Set Mark</p>
-            <p>Arrange</p>
-        </div>
-        <div class="col ">
-            <h4>BLOG</h4>
-            <p>Post</p>
-            <p>Delete</p>
-            <p>Edit</p>
-        </div>
+    <div class="STUDENT">
+        <h4>STUDENT</h4>
+        <a href="{% url 'AttendanceForStudent' user.id %}"><p>Get Attendance</p></a>
+        <a href="{% url 'Mark' user.id %}"><p>Get Mark</p></a>
     </div>
-    <div class="row">
-        <div class="col ">
-            <h4>LECTURE</h4>
-            <p>Edit System</p>
-        </div>
-        <div class="col ">
-            <h4>ACCOUNT</h4>
-            <a href="{% url 'home' %}"><p>Log out</p></a>
-            <p>Change Password</p>
-        </div>
+    <div class="Account">
+        <h4>ACCOUNT</h4>
+        <a href="{% url 'home' %}"><p>Log out</p></a>
+        <a href="{% url 'accountManagement' 'student' user.id %}"><p>Account Management</p></a>
     </div>
 {% endblock content %}

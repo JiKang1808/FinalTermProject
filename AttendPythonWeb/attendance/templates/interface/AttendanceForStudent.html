@@ -1,0 +1,31 @@
+{% extends "page/interface_base.html" %}
+
+{% block title %}
+    Attend for Student
+{% endblock title %}
+
+{% block information %}
+    Student: {{ student.name }},Student Code: {{ student.student_id}}
+{% endblock information %}
+
+{% block content %}
+    <button>
+        Attend
+    </button>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>Student Code</td>
+            {% for classdate in student.getClassDates %}
+                <td> {{classdate|date:"d/m/Y"}} </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td> {{student.name}} </td>
+            <td> {{student.student_id}} </td>
+            {% for status in statusList %}
+                <td > {{status}} </td >
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock content %}

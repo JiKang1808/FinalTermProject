@@ -55,7 +55,7 @@
           <div class="col ">
               <h4>ACCOUNT</h4>
               <a href="{% url 'home' %}"><p>Log out</p></a>
-              <p>Change Password</p>
+              <a href="{% url 'accountManagement' 'lecturer' user.id %}"><p>Account Management</p></a>
           </div>
       </div>    
 {% endblock content %}

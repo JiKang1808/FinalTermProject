@@ -1,0 +1,75 @@
+{% extends "page/interface_base.html" %}
+
+{% block title %}
+    Account Management
+{% endblock title %}
+
+{% block information %}
+    Account Management
+{% endblock information %}
+
+{% block content %}
+    <h2>
+        User information
+    </h2>
+    <table class="acc">
+        <tr>
+            <td>
+                Username:
+            </td>
+           <td>
+                {{user.user.username}}
+           </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="oldPass">Password:</label><br>
+            </td>
+           <td>                
+                <input type="password" name="oldPass" id="oldPassDefault" value="{{user.user.password}}">
+           </td>
+        </tr>
+    </table>
+    <button onclick="ShowForm()">
+         Change Password
+    </button>
+    <form method="POST">
+    {% csrf_token %}
+        <div id="myForm">
+            <label for="oldPass">Old Password:</label><br>
+            <input type="password" name="oldPass" id="oldPass"><br>
+            <label for="newPass">New Password:</label><br>
+            <input type="password" name="newPass" id="newPass"><br>
+            <label for="lname">Confirm New Password:</label><br>
+            <input type="password" name="cfmPass" id="cfmPass"><br><br>
+            <button type="submit" onclick="CheckPass()">Save</button>
+        </div>
+    </form>
+    <script>
+        function ShowForm() {
+            var div = document.getElementById("myForm");
+            if (div.style.display === "none") {
+                div.style.display = "block";
+            } else {
+                div.style.display = "none";
+            }
+        }
+        function CheckPass() {
+            var oldPassDefault = document.getElementById("oldPassDefault").value;
+            var oldPass = document.getElementById("oldPass").value;
+            if (oldPass!==oldPassDefault)
+            {
+                alert("Wrong Password!");
+                return false;
+            }
+            var newPass = document.getElementById("newPass").value;
+            var cfmPass = document.getElementById("cfmPass").value;
+            if (newPass!==cfmPass)
+            {
+                alert("Confirm Password does not match!");
+                return false;
+            }
+            alert("Change Password Successfully!");
+        }
+    </script>    
+{% endblock content %}

@@ -98,6 +98,9 @@ class Student(models.Model):
             else:
                 sttLst.append('Absent')
         return sttLst
+    def getClassDates(self):
+        classDates = self.class_name.get_class_dates()
+        return classDates
 
 # Model Attendance
 class Attendance(models.Model):

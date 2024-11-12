@@ -23,5 +23,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('class/<int:id>',views.getClass,name='Class'),
     path('attendlist/<int:id>',views.getAttendanceList,name='AttendanceList'),
+    path('attendForStudent/<int:id>',views.getAttendForStudent,name='AttendanceForStudent'),
+    path('mark/<int:id>',views.getMark,name='Mark'),
+    path('accountManagement/<str:role>/<int:id>',views.getAccountManagement,name='accountManagement'),
 ]
 

@@ -84,3 +84,7 @@ h2{
 table.Attend{
     overflow-x: auto;
 }
+
+#myForm{
+    display: none;
+}

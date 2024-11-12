@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from .models import Student, Attendance, Teacher, Class, User
 
 @csrf_exempt
@@ -57,3 +58,42 @@ def getAttendanceList(request, id):
         'class_dates': class_dates
     }
     return render(request, 'interface/AttendForLecturer.html', context)
+
+def getAttendForStudent(request, id):
+    student = Student.objects.get(id=id)
+    attendanceList = student.getStatus()
+    context = {
+        'student': student,
+        'statusList': attendanceList
+    }
+    return render(request, 'interface/AttendanceForStudent.html', context)
+
+def getMark(request, id):
+    student = Student.objects.get(id=id)
+    context = {
+        'student': student
+    }
+    return render(request, 'interface/Mark.html', context)
+
+def getAccountManagement(request,role,id):
+    if role == 'student':
+        user = Student.objects.get(id=id)
+    elif role == 'lecturer':
+        user = Teacher.objects.get(id=id)
+    context = {
+        'user': user
+    }
+    if request.method=='POST':
+        old_password = request.POST.get('oldPass')
+        new_pass = request.POST.get('newPass')
+        cfm_pass = request.POST.get('cfmPass')
+        if old_password != user.user.password:
+            messages.error(request, 'Wrong password')
+        elif cfm_pass != new_pass:
+            messages.error(request, 'New password does not match')
+        else:
+            messages.success(request, 'Changed password successfully')
+            new_pass = request.POST.get('newPass')
+            user.user.password = new_pass
+            user.user.save()
+    return render(request, 'interface/AccountManagement.html', context)
