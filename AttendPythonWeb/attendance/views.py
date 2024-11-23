@@ -74,6 +74,7 @@ def getMark(request, id):
 def getAccountManagement(request,role,id):
     if role == 'student':
         user = Student.objects.get(id=id)
+        classes = user.class_name
     elif role == 'lecturer':
         user = Teacher.objects.get(id=id)
         classes = Class.objects.filter(teacher=user)
