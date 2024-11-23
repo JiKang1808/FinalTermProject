@@ -1,5 +1,5 @@
 {% extends "page/interface_base.html" %}
-
+{% load static %}
 {% block title %}
     Attend for Student
 {% endblock title %}
@@ -8,24 +8,83 @@
     Student: {{ student.name }},Student Code: {{ student.student_id}}
 {% endblock information %}
 
+
+{% block sayhi %}
+    <h2>Hi! STUDENT</h2>
+    <p>Welcome {{student.name}}!, What do you want us to do? </p>     
+    <hr>   
+    <h2 class="text-center">CLASS</h2>
+    <a href="{% url 'AttendanceForStudent' student.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Attendance</div>
+        </div>
+    </a>
+    <a href="{% url 'Mark' student.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Mark</div>
+        </div>
+    </a>           
+{% endblock sayhi %}
+
+{% block section2 %}
+    <div class="in4">
+        <form method="post">
+            {% csrf_token %}
+            <label for="std-atd-code">Student - Attendance Code</label>
+            <input type="text" id="std-atd-code" name="std-atd-code">
+            <button class="btn btn-primary">
+                Attend
+            </button>
+        </form>
+        <hr>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Student Code</td>
+                {% for classdate in student.getClassDates %}
+                    <td> {{classdate|date:"d/m/Y"}} </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td> {{student.name}} </td>
+                <td> {{student.student_id}} </td>
+                {% for status in statusList %}
+                    <td > {{status}} </td >
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+{% endblock section2 %}
+
+{% block section3 %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'student' student.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endblock section3 %}
 {% block content %}
-    <button>
-        Attend
-    </button>
-    <table>
-        <tr>
-            <td>Name</td>
-            <td>Student Code</td>
-            {% for classdate in student.getClassDates %}
-                <td> {{classdate|date:"d/m/Y"}} </td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <td> {{student.name}} </td>
-            <td> {{student.student_id}} </td>
-            {% for status in statusList %}
-                <td > {{status}} </td >
-            {% endfor %}
-        </tr>
-    </table>
+    
 {% endblock content %}

@@ -1,5 +1,5 @@
 {% extends "page/interface_base.html" %}
-
+{% load static %}
 {% block title %}
     Account Management
 {% endblock title %}
@@ -8,68 +8,204 @@
     Account Management
 {% endblock information %}
 
-{% block content %}
-    <h2>
-        User information
-    </h2>
-    <table class="acc">
-        <tr>
-            <td>
-                Username:
-            </td>
-           <td>
-                {{user.user.username}}
-           </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="oldPass">Password:</label><br>
-            </td>
-           <td>                
-                <input type="password" name="oldPass" id="oldPassDefault" value="{{user.user.password}}">
-           </td>
-        </tr>
-    </table>
-    <button onclick="ShowForm()">
-         Change Password
-    </button>
-    <form method="POST">
-    {% csrf_token %}
-        <div id="myForm">
-            <label for="oldPass">Old Password:</label><br>
-            <input type="password" name="oldPass" id="oldPass"><br>
-            <label for="newPass">New Password:</label><br>
-            <input type="password" name="newPass" id="newPass"><br>
-            <label for="lname">Confirm New Password:</label><br>
-            <input type="password" name="cfmPass" id="cfmPass"><br><br>
-            <button type="submit" onclick="CheckPass()">Save</button>
+{% block sayhi %}
+    {% if user.user.role == "Student" %}
+        <h2>Hi! STUDENT</h2>
+        <p>Welcome {{user.name}}!, What do you want us to do? </p>     
+        <hr>   
+        <h2 class="text-center">CLASS</h2>
+        <a href="{% url 'AttendanceForStudent' user.id %}">
+            <div class="class-list-item">
+                <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+                <div class="link-class">Get Attendance</div>
+            </div>
+        </a>
+        <a href="{% url 'Mark' user.id %}">
+            <div class="class-list-item">
+                <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+                <div class="link-class">Get Mark</div>
+            </div>
+        </a>           
+    {% else %}
+        <h2>Hi! LECTURER</h2>
+        <p>Welcome {{user.name}}!, What do you want us to do? </p>     
+        <hr>   
+        <h2 class="text-center">CLASS</h2>
+        {% for class in classes %}
+        <a href="{% url 'Class' class.id %}">    
+            <div class="class-list-item">
+                <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+                <div class="link-class">{{class.class_name}}</div>
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+{% endblock sayhi %}
+
+{% block func %}
+    {% if user.user.role == "Teacher" %}
+    <br>
+    <br>
+    <br>
+    <h2 class="text-center">FUNCTION</h2>
+    <div class="func-table">
+        <div class="func1">
+            <h3>Set mark</h3>
+            <hr>
+            <p>You can set mark for student in class</p>
         </div>
-    </form>
-    <script>
-        function ShowForm() {
-            var div = document.getElementById("myForm");
-            if (div.style.display === "none") {
-                div.style.display = "block";
-            } else {
-                div.style.display = "none";
+        <div class="func2">
+            <h3>Student list</h3>
+            <hr>
+            <p>You can see the student in class</p>
+        </div>
+        <div class="func3">
+            <h3>Arrange</h3>
+            <hr>
+            <p>Arrange students by their mark</p>
+        </div>
+        <div class="func4">
+            <h3>Attendance</h3>
+            <hr>
+            <p>You can see the attendance status of the class</p>
+            <hr>
+            {% for class in classes %}
+                <a class="dropdown-item atd-list" href="{% url 'AttendanceList' class.id %}">
+                    {{class.class_name}}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock func %}
+
+{% block section2 %}
+    <div class="in4">
+        <h2>
+            User information
+        </h2>
+        <table class="acc">
+            <tr>
+                <td>
+                    Username:
+                </td>
+               <td>
+                    {{user.user.username}}
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="oldPass">Password:</label><br>
+                </td>
+               <td>                
+                    <input type="password" name="oldPass" id="oldPassDefault" value="{{user.user.password}}">
+               </td>
+            </tr>
+        </table>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" onclick="ShowForm()">
+                 Change Password
+            </button>
+        </div>
+        <form method="POST">
+        {% csrf_token %}
+            <div id="myForm">
+                <div class="d-flex justify-content-center" style="flex-direction:column">
+                    <label for="oldPass">Old Password:</label><br>
+                    <input type="password" name="oldPass" id="oldPass"><br>
+                    <label for="newPass">New Password:</label><br>
+                    <input type="password" name="newPass" id="newPass"><br>
+                    <label for="lname">Confirm New Password:</label><br>
+                    <input type="password" name="cfmPass" id="cfmPass"><br><br>
+                </div>
+                <div class="d-flex justify-content-center"><button type="submit" onclick="CheckPass()" class="btn btn-primary">Save</button></div>
+            </div>
+        </form>
+        <script>
+            function ShowForm() {
+                var div = document.getElementById("myForm");
+                if (div.style.display === "none") {
+                    div.style.display = "block";
+                } else {
+                    div.style.display = "none";
+                }
             }
-        }
-        function CheckPass() {
-            var oldPassDefault = document.getElementById("oldPassDefault").value;
-            var oldPass = document.getElementById("oldPass").value;
-            if (oldPass!==oldPassDefault)
-            {
-                alert("Wrong Password!");
-                return false;
+            function CheckPass() {
+                var oldPassDefault = document.getElementById("oldPassDefault").value;
+                var oldPass = document.getElementById("oldPass").value;
+                if (oldPass!==oldPassDefault)
+                {
+                    alert("Wrong Password!");
+                    return false;
+                }
+                var newPass = document.getElementById("newPass").value;
+                var cfmPass = document.getElementById("cfmPass").value;
+                if (newPass!==cfmPass)
+                {
+                    alert("Confirm Password does not match!");
+                    return false;
+                }
+                alert("Change Password Successfully!");
             }
-            var newPass = document.getElementById("newPass").value;
-            var cfmPass = document.getElementById("cfmPass").value;
-            if (newPass!==cfmPass)
-            {
-                alert("Confirm Password does not match!");
-                return false;
-            }
-            alert("Change Password Successfully!");
-        }
-    </script>    
+        </script>    
+    </div>
+{% endblock section2 %}
+
+{% block section3 %}
+    {% if user.user.role == "Student" %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'student' user.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'lecturer' user.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+{% endblock section3 %}
+
+{% block content %}
 {% endblock content %}

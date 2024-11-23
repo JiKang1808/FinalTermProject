@@ -1,12 +1,62 @@
 {% extends "page/interface_base.html" %}
-
+{% load static %}
 {% block title %}
 
 {% endblock title %}
 
-{% block content %}
+{% block sayhi %}
+    <h2>Hi! LECTURER</h2>
+    <p>Welcome {{class.teacher.name}}!, What do you want us to do? </p>     
+    <hr>   
+    <h2 class="text-center">CLASS</h2>
+    {% for class in classes %}
+    <a href="{% url 'Class' class.id %}">    
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">{{class.class_name}}</div>
+        </div>
+    </a>
+    {% endfor %}                
+{% endblock sayhi %}
 
-    <h2>Giờ vào lớp: {{class.start_time}} </h2>
+{% block func %}
+    <br>
+    <br>
+    <br>
+    <h2 class="text-center">FUNCTION</h2>
+    <div class="func-table">
+        <div class="func1">
+            <h3>Set mark</h3>
+            <hr>
+            <p>You can set mark for student in class</p>
+        </div>
+        <div class="func2">
+            <h3>Student list</h3>
+            <hr>
+            <p>You can see the student in class</p>
+        </div>
+        <div class="func3">
+            <h3>Arrange</h3>
+            <hr>
+            <p>Arrange students by their mark</p>
+        </div>
+        <div class="func4">
+            <h3>Attendance</h3>
+            <hr>
+            <p>You can see the attendance status of the class</p>
+            <hr>
+            {% for class in classes %}
+                <a class="dropdown-item atd-list" href="{% url 'AttendanceList' class.id %}">
+                    {{class.class_name}}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock func %}
+
+{% block section2 %}
+    <div class="in4">
+        <h2>Giờ vào lớp: {{class.start_time}} </h2>
     <table class="Attend">
         <tr>
             <td>Order</td>
@@ -29,4 +79,38 @@
             </tr>
         {% endfor %}
     </table>
+    </div>
+{% endblock section2 %}
+
+{% block section3 %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'lecturer' class.teacher.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endblock section3 %}
+
+{% block content %}
+
+    
 {% endblock content %}

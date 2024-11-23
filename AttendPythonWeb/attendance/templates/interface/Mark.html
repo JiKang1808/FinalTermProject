@@ -1,5 +1,5 @@
 {% extends "page/interface_base.html" %}
-
+{% load static %}
 {% block title %}
     Mark
 {% endblock title %}
@@ -8,40 +8,94 @@
     Name: {{student.name}}, Student Code : {{student.student_id}}
 {% endblock information %}
 
+{% block sayhi %}
+    <h2>Hi! STUDENT</h2>
+    <p>Welcome {{student.name}}!, What do you want us to do? </p>     
+    <hr>   
+    <h2 class="text-center">CLASS</h2>
+    <a href="{% url 'AttendanceForStudent' student.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Attendance</div>
+        </div>
+    </a>
+    <a href="{% url 'Mark' student.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Mark</div>
+        </div>
+    </a>           
+{% endblock sayhi %}
+
+{% block section2 %}
+            <div class="in4">
+                <h2>YOUR SCORE</h2>
+                <table>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Student Code</strong></td>
+                        <td><strong>Midle Score</strong></td>
+                        <td><strong>Final Score</strong></td>
+                        <td><strong>Total Score</strong></td>
+                        <td><strong>Arrange</strong></td>
+                    </tr>
+                    <tr>
+                        <td> {{student.name}} </td>
+                        <td> {{student.student_id}} </td>
+                        <td> 
+                            {% if student.midScr %}
+                                {{student.midScr}}
+                            {% endif %}     
+                        </td>
+                        <td>
+                            {% if student.fnlScr %}
+                                {{student.fnlScr}}
+                            {% endif %}   
+                        </td>
+                        <td>
+                            {% if student.midScr and student.fnlScr %}
+                                {{student.Total}}
+                            {% endif %}   
+                        </td>
+                        <td>
+                            {% if student.midScr and student.fnlScr%}
+                                {{student.Arrange}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+{% endblock section2 %}
+
+{% block section3 %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'student' student.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endblock section3 %}
+
 {% block content %}
-    <table>
-        <tr>
-            <td>Name</td>
-            <td>Student Code</td>
-            <td>Midle Score</td>
-            <td>Final Score</td>
-            <td>Total Score</td>
-            <td>Arrange</td>
-        </tr>
-        <tr>
-            <td> {{student.name}} </td>
-            <td> {{student.student_id}} </td>
-            <td> 
-                {% if student.midScr %}
-                    {{student.midScr}}
-                {% endif %}     
-            </td>
-            <td>
-                {% if student.fnlScr %}
-                    {{student.fnlScr}}
-                {% endif %}   
-            </td>
-            <td>
-                {% if student.midScr and student.fnlScr %}
-                    {{student.Total}}
-                {% endif %}   
-            </td>
-            <td>
-                {% if student.midScr and student.fnlScr%}
-                    {{student.Arrange}}
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+    
    
 {% endblock content %}

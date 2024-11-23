@@ -1,5 +1,5 @@
 {% extends "page/interface_base.html" %}
-
+{% load static %}
 {% block title %}
     Student
 {% endblock title %}
@@ -8,19 +8,109 @@
     Name: {{user.name}}, Student Code : {{user.student_id}}, Class Name: {{user.class_name}}
 {% endblock information %}
 
+{% block sayhi %}
+    <h2>Hi! STUDENT</h2>
+    <p>Welcome {{user.name}}!, What do you want us to do? </p>     
+    <hr>   
+    <h2 class="text-center">CLASS</h2>
+    <a href="{% url 'AttendanceForStudent' user.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Attendance</div>
+        </div>
+    </a>
+    <a href="{% url 'Mark' user.id %}">
+        <div class="class-list-item">
+            <div class="icon-class"><img src="{% static 'attendance/icon1.jpg' %}" alt="" width="40px" height="40px"></div>
+            <div class="link-class">Get Mark</div>
+        </div>
+    </a>           
+{% endblock sayhi %}
+
+{% block section2 %}
+    <div class="row">
+        <div class="col">
+            <h2>OUR SCHOOL</h2>
+            <!-- Carousel -->
+            <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators/dots -->
+                <div class="carousel-indicators">
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                </div>                
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{% static 'attendance/sch1.jpg' %}" alt="Picture1" class="d-block" width="800px" height="400px">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'attendance/sch2.jpg' %}" alt="Picture2" class="d-block" width="800px" height="400px">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'attendance/sch3.jpg' %}" alt="Picture3" class="d-block" width="800px" height="400px">
+                </div>
+                </div>
+                
+                <!-- Left and right controls/icons -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+                    </div>
+        <div class="col">
+            <div class="in4">
+                <h2>INFORMATION</h2>
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon2.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Name: {{user.name}}</div>
+                </div>
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon3.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Student Code: {{user.student_id}} </div>
+                </div>
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon13.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Class: {{user.class_name}} </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock section2 %}
+
+{% block section3 %}
+    <div class="row">
+        <div class="col-8">
+            <div class="account-icon">
+                <img src="{% static 'attendance/icon4.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon5.png' %}" alt="" width="300px" height="300px" class="acc-item">
+                <img src="{% static 'attendance/icon6.png' %}" alt="" width="300px" height="300px" class="acc-item">
+            </div>
+        </div>
+        <div class="col-4 class-list acc">
+            <h2>ACCOUNT</h2>
+            <hr>
+            <a href="{% url 'home' %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon7.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Log out</div>
+                </div>
+            </a>
+            <a href="{% url 'accountManagement' 'student' user.id %}">
+                <div class="class-list-item">
+                    <div class="icon-class"><img src="{% static 'attendance/icon8.png' %}" alt="" width="40px" height="40px"></div>
+                    <div class="link-class">Account Management</div>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endblock section3 %}
+
 {% block content %}
     <script>
         alert("Login successfully!")
     </script>
-    <h2>List of Function for Student</h2>
-    <div class="STUDENT">
-        <h4>STUDENT</h4>
-        <a href="{% url 'AttendanceForStudent' user.id %}"><p>Get Attendance</p></a>
-        <a href="{% url 'Mark' user.id %}"><p>Get Mark</p></a>
-    </div>
-    <div class="Account">
-        <h4>ACCOUNT</h4>
-        <a href="{% url 'home' %}"><p>Log out</p></a>
-        <a href="{% url 'accountManagement' 'student' user.id %}"><p>Account Management</p></a>
-    </div>
 {% endblock content %}
